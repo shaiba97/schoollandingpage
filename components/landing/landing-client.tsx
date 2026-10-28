@@ -22,11 +22,13 @@ import {
   CheckCircle2,
   Loader2,
   Globe,
+  MessageCircle,
 } from "lucide-react";
 import { cn } from "cn";
 import { Toaster, toast } from "@/components/ui/toast";
 import { DirectionProvider } from "@/components/ui/direction";
 import { LandingLocaleProvider, useLandingLocale } from "@/components/landing/locale";
+import type { PublicSupportContact } from "@/lib/contacts-fetch";
 import {
   AR_CHECKLIST_LABELS,
   AR_TIER_NAMES,
@@ -34,6 +36,31 @@ import {
   type LandingLocale,
 } from "@/lib/i18n/landing";
 import { priceLabel, tierDisplayName, type PricingTier } from "@/lib/pricing";
+
+// WhatsApp and mailto targets stay LTR and ASCII no matter the page
+// direction: wa.me wants digits only (no plus, no spaces).
+function waHref(phone: string): string {
+  return `https://wa.me/${phone.replace(/\D/g, "")}`;
+}
+
+function mailtoHref(email: string): string {
+  return `mailto:${email.trim()}`;
+}
+
+function pickContacts(
+  contacts: PublicSupportContact[],
+  region: string,
+): { phone?: PublicSupportContact; email?: PublicSupportContact } {
+  const scoped = region
+    ? contacts.filter((c) => c.region === region)
+    : contacts;
+  // Fall back to the whole directory when the picked region has none.
+  const pool = scoped.length > 0 ? scoped : contacts;
+  return {
+    phone: pool.find((c) => c.contactType === "PHONE"),
+    email: pool.find((c) => c.contactType === "EMAIL"),
+  };
+}
 
 function Logo({ tagline }: { tagline?: boolean }) {
   const { t, dir } = useLandingLocale();
@@ -541,6 +568,81 @@ function WhyUs() {
   );
 }
 
+function ContactCard({
+  label,
+  cta,
+  value,
+  href,
+  icon: Icon,
+}: {
+  label: string;
+  cta: string;
+  value: string;
+  href: string;
+  icon: LucideIcon;
+}) {
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group flex items-center gap-3 rounded-xl border border-slate-200 bg-card p-4 shadow-sm transition-all hover:shadow-md"
+      // The contact value itself is always LTR even in the Arabic layout.
+      dir="ltr"
+    >
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100 transition-colors group-hover:bg-emerald-600 group-hover:text-white">
+        <Icon className="size-5" aria-hidden />
+      </div>
+      <div className="min-w-0 flex-1 text-start">
+        <div className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
+          {label}
+        </div>
+        <div className="truncate text-sm font-semibold">{value}</div>
+      </div>
+      <span
+        className="rounded-lg bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700 transition-colors group-hover:bg-emerald-600 group-hover:text-white"
+        dir="ltr"
+      >
+        {cta}
+      </span>
+    </a>
+  );
+}
+
+function FloatingContacts({ contacts }: { contacts: PublicSupportContact[] }) {
+  const { t } = useLandingLocale();
+  const picked = pickContacts(contacts, "");
+  const fab =
+    "fixed bottom-4 left-4 z-40 flex size-12 items-center justify-center rounded-full shadow-lg ring-1 transition-all hover:scale-105";
+
+  return (
+    <div className="flex flex-col gap-2">
+      {picked.phone && (
+        <a
+          href={waHref(picked.phone.contact)}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t.contact.whatsappLabel}
+          data-testid="fab-whatsapp"
+          className={cn(fab, "bottom-4 left-4 bg-[#25D366] text-white ring-black/10 hover:bg-[#20bd5a]")}
+        >
+          <MessageCircle className="size-6" aria-hidden />
+        </a>
+      )}
+      {picked.email && (
+        <a
+          href={mailtoHref(picked.email.contact)}
+          aria-label={t.contact.emailLabel}
+          data-testid="fab-email"
+          className={cn(fab, "bottom-20 left-4 bg-primary text-primary-foreground hover:bg-primary/90")}
+        >
+          <Mail className="size-6" aria-hidden />
+        </a>
+      )}
+    </div>
+  );
+}
+
 type FormState = {
   fullName: string;
   schoolName: string;
@@ -648,7 +750,7 @@ function RegionField({
   );
 }
 
-function Inquire() {
+function Inquire({ contacts }: { contacts: PublicSupportContact[] }) {
   const { t, locale } = useLandingLocale();
   const [form, setForm] = React.useState<FormState>(EMPTY_FORM);
   const [errors, setErrors] = React.useState<Partial<Record<keyof FormState, string>>>({});
@@ -717,10 +819,9 @@ function Inquire() {
     }
   };
 
-  const badges: Array<{ label: string; value: string; icon: LucideIcon }> = [
-    { label: t.contact.helplineLabel, value: t.contact.helplineValue, icon: Phone },
-    { label: t.contact.supportLabel, value: t.contact.supportValue, icon: Mail },
-  ];
+  // Live, region-aware contacts: the picks follow the form's region select
+  // so a prospect always sees the team member serving their region.
+  const picked = pickContacts(contacts, form.region);
 
   return (
     <section id="contact" className="bg-white">
@@ -856,27 +957,29 @@ function Inquire() {
             )}
           </div>
           <div className="space-y-4 lg:col-span-2">
-            {badges.map((badge) => {
-              const Icon = badge.icon;
-              return (
-                <div
-                  key={badge.label}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200 bg-card p-4 shadow-sm transition-colors hover:shadow-md"
-                >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 ring-1 ring-emerald-100">
-                    <Icon className="size-5" aria-hidden />
-                  </div>
-                  <div>
-                    <div className="text-xs font-medium tracking-wider text-muted-foreground uppercase">
-                      {badge.label}
-                    </div>
-                    <div dir="ltr" className="text-start text-sm font-semibold">
-                      {badge.value}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+            {picked.phone && (
+              <ContactCard
+                label={t.contact.whatsappLabel}
+                cta={t.contact.ctaChat}
+                value={picked.phone.contact}
+                href={waHref(picked.phone.contact)}
+                icon={MessageCircle}
+              />
+            )}
+            {picked.email && (
+              <ContactCard
+                label={t.contact.emailLabel}
+                cta={t.contact.ctaEmail}
+                value={picked.email.contact}
+                href={mailtoHref(picked.email.contact)}
+                icon={Mail}
+              />
+            )}
+            {!picked.phone && !picked.email && (
+              <p className="rounded-xl border border-slate-200 bg-card p-4 text-sm leading-relaxed text-muted-foreground">
+                {t.contact.contactsFallbackNote}
+              </p>
+            )}
             <div className="rounded-xl border border-emerald-100 bg-emerald-50 p-5">
               <h3 className="text-sm font-bold text-emerald-900">{t.contact.regionCardTitle}</h3>
               <p className="mt-2 text-sm leading-relaxed text-emerald-800">
@@ -952,27 +1055,40 @@ function Footer() {
   );
 }
 
-export function LandingPage({ initialTiers }: { initialTiers: PricingTier[] }) {
+export function LandingPage({
+  initialTiers,
+  initialContacts,
+}: {
+  initialTiers: PricingTier[];
+  initialContacts: PublicSupportContact[];
+}) {
   return (
     <LandingLocaleProvider>
-      <LandingShell initialTiers={initialTiers} />
+      <LandingShell initialTiers={initialTiers} initialContacts={initialContacts} />
     </LandingLocaleProvider>
   );
 }
 
-function LandingShell({ initialTiers }: { initialTiers: PricingTier[] }) {
+function LandingShell({
+  initialTiers,
+  initialContacts,
+}: {
+  initialTiers: PricingTier[];
+  initialContacts: PublicSupportContact[];
+}) {
   const { dir, locale } = useLandingLocale();
   return (
     <DirectionProvider direction={dir}>
       <div dir={dir} lang={locale} className="flex min-h-screen flex-col bg-background">
         <Toaster />
+        <FloatingContacts contacts={initialContacts} />
         <Navbar />
         <main className="flex-1">
           <Hero />
           <Portals />
           <Pricing tiers={initialTiers} />
           <WhyUs />
-          <Inquire />
+          <Inquire contacts={initialContacts} />
         </main>
         <Footer />
       </div>

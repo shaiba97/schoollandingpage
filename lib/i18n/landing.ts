@@ -163,10 +163,12 @@ const en = {
     thanksLead: (name: string, email: string) =>
       `Thank you, ${name}. We will reach you at ${email} shortly.`,
     sendAnother: "Send another inquiry",
-    helplineLabel: "Emergency helpline",
-    helplineValue: "+966 800 123 4567",
-    supportLabel: "Support email",
-    supportValue: "support@madar.example",
+    whatsappLabel: "WhatsApp",
+    emailLabel: "Email",
+    ctaChat: "Start chat",
+    ctaEmail: "Send email",
+    contactsFallbackNote:
+      "Reach our support team directly — we answer within one working day.",
     regionCardTitle: "Region-ready deployment",
     regionCardBody:
       "Localized fee rules, bilingual records, and enrollment journeys for schools in Sudan, Egypt, and the GCC (KSA, Qatar, Kuwait, Oman, Bahrain) out of the box.",
@@ -338,10 +340,12 @@ const ar: Messages = {
     thanksLead: (name: string, email: string) =>
       `شكراً ${name}، سنتواصل معك على ${email} قريباً.`,
     sendAnother: "إرسال طلب آخر",
-    helplineLabel: "الخط الساخن للطوارئ",
-    helplineValue: "+966 800 123 4567",
-    supportLabel: "البريد الإلكتروني للدعم",
-    supportValue: "support@madar.example",
+    whatsappLabel: "واتساب",
+    emailLabel: "البريد الإلكتروني",
+    ctaChat: "ابدأ المحادثة",
+    ctaEmail: "أرسل رسالة",
+    contactsFallbackNote:
+      "تواصل مباشرة مع فريق الدعم — نرد خلال يوم عمل واحد.",
     regionCardTitle: "جاهز للمنطقة منذ اليوم الأول",
     regionCardBody:
       "قواعد رسوم محلية، سجلات ثنائية اللغة، ورحلات تسجيل مخصصة للمدارس في السودان ومصر ودول الخليج (السعودية، قطر، الكويت، عُمان، البحرين) بدون إضافات.",
