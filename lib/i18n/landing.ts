@@ -169,7 +169,7 @@ const en = {
     supportValue: "support@madar.example",
     regionCardTitle: "Region-ready deployment",
     regionCardBody:
-      "Localized fee rules, bilingual records, and enrollment journeys for schools in Sudan, Egypt, and the GCC (KSA, UAE, Qatar, Kuwait, Oman, Bahrain) out of the box.",
+      "Localized fee rules, bilingual records, and enrollment journeys for schools in Sudan, Egypt, and the GCC (KSA, Qatar, Kuwait, Oman, Bahrain) out of the box.",
   },
   footer: {
     blurb:
@@ -344,7 +344,7 @@ const ar: Messages = {
     supportValue: "support@madar.example",
     regionCardTitle: "جاهز للمنطقة منذ اليوم الأول",
     regionCardBody:
-      "قواعد رسوم محلية، سجلات ثنائية اللغة، ورحلات تسجيل مخصصة للمدارس في السودان ومصر ودول الخليج (السعودية، الإمارات، قطر، الكويت، عُمان، البحرين) بدون إضافات.",
+      "قواعد رسوم محلية، سجلات ثنائية اللغة، ورحلات تسجيل مخصصة للمدارس في السودان ومصر ودول الخليج (السعودية، قطر، الكويت، عُمان، البحرين) بدون إضافات.",
   },
   footer: {
     blurb:
@@ -369,7 +369,6 @@ export const REGIONS: Array<{ value: string; en: string; ar: string }> = [
   { value: "SUDAN", en: "Sudan", ar: "السودان" },
   { value: "EGYPT", en: "Egypt", ar: "مصر" },
   { value: "GCC_KSA", en: "KSA (Saudi Arabia)", ar: "السعودية" },
-  { value: "GCC_UAE", en: "UAE (United Arab Emirates)", ar: "الإمارات" },
   { value: "GCC_KUWAIT", en: "Kuwait", ar: "الكويت" },
   { value: "GCC_QATAR", en: "Qatar", ar: "قطر" },
   { value: "GCC_OMAN", en: "Oman", ar: "عُمان" },
