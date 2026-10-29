@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Roboto, Geist_Mono, Cairo } from "next/font/google";
 import "./globals.css";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const roboto = Roboto({
   variable: "--font-sans",
@@ -31,7 +32,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${roboto.variable} ${geistMono.variable} ${cairo.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <SpeedInsights />
+      </body>
     </html>
   );
 }
