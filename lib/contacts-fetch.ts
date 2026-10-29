@@ -14,7 +14,7 @@ export async function fetchSupportContacts(): Promise<PublicSupportContact[]> {
   // Support contacts are edited in the platform console; a short revalidate
   // keeps the landing page's WhatsApp/email targets live within seconds.
   await cacheLife({ stale: 10, revalidate: 30, expire: 600 });
-  const base = process.env.BACKEND_URL || "http://localhost:3000";
+  const base = process.env.BACKEND_URL || "https://schoolbackend-7n8a.onrender.com";
   try {
     const response = await fetch(`${base}/api/platform/public/support-contacts`, {
       signal: AbortSignal.timeout(5000),

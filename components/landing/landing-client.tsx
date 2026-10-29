@@ -486,7 +486,7 @@ function Pricing({ tiers }: { tiers: PricingTier[] }) {
                     {priceLabel(tier, yearly ? tier.monthlyPrice : tier.price, locale)}
                     {yearly ? t.pricing.perMonth : t.pricing.perYear}
                   </span>{" "}
-                  · {yearly ? t.pricing.billedAnnually : t.pricing.billedMonthly}
+                  Â· {yearly ? t.pricing.billedAnnually : t.pricing.billedMonthly}
                 </p>
                 <ul className="mt-6 flex-1 space-y-2.5">
                   {tier.checklist.map((item) => (
@@ -786,7 +786,7 @@ function Inquire({ contacts }: { contacts: PublicSupportContact[] }) {
     setSubmitting(true);
     try {
       const response = await fetch(
-        `${(process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3000").replace(/\/$/, "")}/api/public/inquiries`,
+        `${(process.env.NEXT_PUBLIC_BACKEND_URL || "https://schoolbackend-7n8a.onrender.com").replace(/\/$/, "")}/api/public/inquiries`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1042,7 +1042,7 @@ function Footer() {
             </span>
             <span className="flex items-center gap-2">
               <a href="#" aria-label="X (Twitter)" className="hover:text-emerald-600">
-                𝕏
+                ð•
               </a>
               <a href="#" aria-label="LinkedIn" className="hover:text-emerald-600">
                 in

@@ -8,7 +8,7 @@ export async function fetchPricingTiers(): Promise<PricingTier[]> {
   "use cache";
   // Refresh the live catalogue every 5 minutes.
   await cacheLife({ stale: 120, revalidate: 300, expire: 3600 });
-  const base = process.env.BACKEND_URL || "http://localhost:3000";
+  const base = process.env.BACKEND_URL || "https://schoolbackend-7n8a.onrender.com";
   try {
     const response = await fetch(`${base}/api/platform/public/pricing-tiers`, {
       signal: AbortSignal.timeout(5000),
