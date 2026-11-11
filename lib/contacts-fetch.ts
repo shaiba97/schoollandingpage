@@ -1,7 +1,7 @@
-// Server-only support-contacts fetcher, kept apart from client code so
-// the "use cache" / cacheLife runtime stays out of the client bundle.
-
-import { cacheLife } from "next/cache";
+// Server-only support-contacts fetcher, kept apart from client code so no
+// caching runtime ever reaches the client bundle. Deliberately uncached:
+// contacts edited in the platform console must show up on the landing
+// page instantly.
 
 export type PublicSupportContact = {
   contact: string;
@@ -10,13 +10,10 @@ export type PublicSupportContact = {
 };
 
 export async function fetchSupportContacts(): Promise<PublicSupportContact[]> {
-  "use cache";
-  // Support contacts are edited in the platform console; a short revalidate
-  // keeps the landing page's WhatsApp/email targets live within seconds.
-  await cacheLife({ stale: 10, revalidate: 30, expire: 600 });
   const base = process.env.BACKEND_URL || "https://schoolbackend-7n8a.onrender.com";
   try {
     const response = await fetch(`${base}/api/platform/public/support-contacts`, {
+      cache: "no-store",
       signal: AbortSignal.timeout(5000),
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);

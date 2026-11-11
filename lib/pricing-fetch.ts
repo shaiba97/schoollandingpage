@@ -1,16 +1,15 @@
-// Server-only pricing fetcher, kept apart from lib/pricing.ts so the
-// "use cache" / cacheLife runtime stays out of the client bundle.
+// Server-only pricing fetcher, kept apart from lib/pricing.ts so no
+// caching runtime ever reaches the client bundle. Deliberately uncached:
+// tier create/update/delete in the platform console must show up on the
+// landing page instantly, so every request reads the live DB.
 
-import { cacheLife } from "next/cache";
 import type { PricingTier } from "./pricing";
 
 export async function fetchPricingTiers(): Promise<PricingTier[]> {
-  "use cache";
-  // Refresh the live catalogue every 5 minutes.
-  await cacheLife({ stale: 120, revalidate: 300, expire: 3600 });
   const base = process.env.BACKEND_URL || "https://schoolbackend-7n8a.onrender.com";
   try {
     const response = await fetch(`${base}/api/platform/public/pricing-tiers`, {
+      cache: "no-store",
       signal: AbortSignal.timeout(5000),
     });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
