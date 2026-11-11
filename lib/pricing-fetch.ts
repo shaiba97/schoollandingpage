@@ -7,7 +7,7 @@ import { fetchLiveJson } from "./backend-fetch";
 import type { PricingTier } from "./pricing";
 
 export async function fetchPricingTiers(): Promise<PricingTier[]> {
-  const base = process.env.BACKEND_URL || "https://schoolbackend-7n8a.onrender.com";
+  const base = process.env.BACKEND_URL || "https://schoolbackend-gilt.vercel.app";
   try {
     const data: unknown = await fetchLiveJson(
       `${base}/api/platform/public/pricing-tiers`,

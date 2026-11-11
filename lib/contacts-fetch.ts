@@ -12,7 +12,7 @@ export type PublicSupportContact = {
 };
 
 export async function fetchSupportContacts(): Promise<PublicSupportContact[]> {
-  const base = process.env.BACKEND_URL || "https://schoolbackend-7n8a.onrender.com";
+  const base = process.env.BACKEND_URL || "https://schoolbackend-gilt.vercel.app";
   try {
     const data: unknown = await fetchLiveJson(
       `${base}/api/platform/public/support-contacts`,

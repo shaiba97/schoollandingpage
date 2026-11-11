@@ -806,7 +806,7 @@ function Inquire({ contacts }: { contacts: PublicSupportContact[] }) {
     setSubmitting(true);
     try {
       const response = await fetch(
-        `${(process.env.NEXT_PUBLIC_BACKEND_URL || "https://schoolbackend-7n8a.onrender.com").replace(/\/$/, "")}/api/public/inquiries`,
+        `${(process.env.NEXT_PUBLIC_BACKEND_URL || "https://schoolbackend-gilt.vercel.app").replace(/\/$/, "")}/api/public/inquiries`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
