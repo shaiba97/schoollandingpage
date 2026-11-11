@@ -3,6 +3,8 @@
 // contacts edited in the platform console must show up on the landing
 // page instantly.
 
+import { fetchLiveJson } from "./backend-fetch";
+
 export type PublicSupportContact = {
   contact: string;
   contactType: "EMAIL" | "PHONE";
@@ -12,12 +14,9 @@ export type PublicSupportContact = {
 export async function fetchSupportContacts(): Promise<PublicSupportContact[]> {
   const base = process.env.BACKEND_URL || "https://schoolbackend-7n8a.onrender.com";
   try {
-    const response = await fetch(`${base}/api/platform/public/support-contacts`, {
-      cache: "no-store",
-      signal: AbortSignal.timeout(5000),
-    });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const data: unknown = await response.json();
+    const data: unknown = await fetchLiveJson(
+      `${base}/api/platform/public/support-contacts`,
+    );
     const items = Array.isArray(data)
       ? data
       : Array.isArray((data as { items?: unknown[] })?.items)
