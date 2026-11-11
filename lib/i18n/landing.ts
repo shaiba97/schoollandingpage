@@ -94,6 +94,9 @@ const en = {
     billedMonthly: "billed monthly",
     popular: "Most popular",
     selectPlan: "Select Plan",
+    emptyTitle: "Plans are being updated.",
+    emptyDescription:
+      "Our tier catalogue is loaded live from the platform. Check back shortly, or reach out to the contact form below and our team will share current pricing.",
   },
   why: {
     eyebrow: "Why us",
@@ -273,6 +276,9 @@ const ar: Messages = {
     billedMonthly: "يُدفع شهرياً",
     popular: "الأكثر طلباً",
     selectPlan: "اختر الخطة",
+    emptyTitle: "يجري تحديث الخطط.",
+    emptyDescription:
+      "تُحمَّل قائمة الخطط مباشرة من المنصة. تفضّل قريباً، أو تواصل معنا عبر نموذج التواصل بالأسفل وسيشاركك فريقنا الأسعار الحالية.",
   },
   why: {
     eyebrow: "لماذا نحن",

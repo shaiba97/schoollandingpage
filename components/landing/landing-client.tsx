@@ -442,8 +442,27 @@ function Pricing({ tiers }: { tiers: PricingTier[] }) {
           </button>
         </div>
 
-        <div className="mx-auto grid max-w-5xl grid-cols-1 items-stretch gap-6 md:grid-cols-3">
-          {visible.map((tier) => {
+        {visible.length === 0 ? (
+          <div className="mx-auto max-w-2xl rounded-xl border border-slate-200 bg-card p-10 text-center shadow-sm">
+            <h3 className="text-lg font-semibold">{t.pricing.emptyTitle}</h3>
+            <p
+              className={cn(
+                "mt-2 text-sm leading-relaxed text-muted-foreground",
+                locale === "ar" && "leading-loose",
+              )}
+            >
+              {t.pricing.emptyDescription}
+            </p>
+            <a
+              href="#contact"
+              className="mt-6 inline-flex h-10 items-center justify-center rounded-lg border border-slate-200 bg-white px-6 text-sm font-semibold transition-colors hover:bg-muted"
+            >
+              {t.contact.eyebrow}
+            </a>
+          </div>
+        ) : (
+          <div className="mx-auto grid max-w-5xl grid-cols-1 items-stretch gap-6 md:grid-cols-3">
+            {visible.map((tier) => {
             const popular = tier.code === popularCode;
             const displayName = localTierName(tier.name, locale);
             return (
@@ -525,8 +544,9 @@ function Pricing({ tiers }: { tiers: PricingTier[] }) {
                 </a>
               </div>
             );
-          })}
-        </div>
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

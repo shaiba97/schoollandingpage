@@ -2,7 +2,7 @@
 // "use cache" / cacheLife runtime stays out of the client bundle.
 
 import { cacheLife } from "next/cache";
-import { FALLBACK_TIERS, type PricingTier } from "./pricing";
+import type { PricingTier } from "./pricing";
 
 export async function fetchPricingTiers(): Promise<PricingTier[]> {
   "use cache";
@@ -22,13 +22,12 @@ export async function fetchPricingTiers(): Promise<PricingTier[]> {
         typeof (tier as PricingTier).code === "string" &&
         Array.isArray((tier as PricingTier).checklist),
     );
-    if (tiers.length === 0) throw new Error("empty catalogue");
     return tiers;
   } catch (error) {
     console.warn(
-      "[landingpage] live pricing unavailable, using bundled catalogue:",
+      "[landingpage] live pricing unavailable, rendering no tiers:",
       error instanceof Error ? error.message : error,
     );
-    return FALLBACK_TIERS;
+    return [];
   }
 }
